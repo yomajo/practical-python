@@ -29,7 +29,6 @@ def read_prices(filename):
                 prices[name] = float(price)
     return prices
 
-
 def portfolio_profit_loss():
     portfolio = read_portfolio('Data/portfolio.csv')
     prices = read_prices('Data/prices.csv')
@@ -40,15 +39,13 @@ def portfolio_profit_loss():
         shares = holding['shares']
         price = holding['price']
         current_price = prices.get(name, price)
-        # print(f'name: {name}, shares: {shares}, price: {price}')
         cost += shares * price
         value += shares * current_price
     print(f'Portfolio cost: {cost:,.2f}, current value: {value:,.2f}. P/L: {value-cost:,.2f}')
 
-def make_report():
+def get_report_obj(portfolio:list, prices:dict) -> list:
+    '''returns report obj as list of tuple rows'''
     report = []
-    portfolio = read_portfolio('Data/portfolio.csv')
-    prices = read_prices('Data/prices.csv')
     for stock in portfolio:
         name, shares, price_paid = stock['name'], stock['shares'], stock['price']
         current_price = prices.get(name, price_paid)
@@ -56,17 +53,28 @@ def make_report():
         current_price_dollar = f'${current_price}'
         report_data = (name, shares, current_price_dollar, change)
         report.append(report_data)
+    return report
 
-    # printing report
+def portfolio_report(portfolio_csv_path:str='Data/portfolio.csv', prices_csv_path:str='Data/prices.csv'):
+    '''collects and parses data from csv files and prints portfolio report to terminal'''
+    portfolio = read_portfolio(portfolio_csv_path)
+    prices = read_prices(prices_csv_path)
+    report = get_report_obj(portfolio, prices)
+    print_report(report)
+
+def print_report(report:list):
+    '''prints report to terminal'''
     headers = ('Name', 'Shares', 'Price', 'Change')
     sep = '-'
     print(f'{headers[0]:>10} {headers[1]:>10} {headers[2]:>10} {headers[3]:>10}'.format(headers))
-    print(f'{sep:->10} '* 4)
-    # body
+    print(f'{sep:->10} ' * len(headers))
     for name, shares, current_price, change in report:
         print(f'{name:>10} {shares:>10} {current_price:>10} {change:>10.2f}')
 
 
 if __name__ == '__main__':
-    pass
-    # make_report()
+    files = ['Data/portfolio.csv', 'Data/portfolio2.csv']
+    for name in files:
+        print(f'{name:-^43s}')
+        portfolio_report(name, 'Data/prices.csv')
+        print()
