@@ -13,17 +13,6 @@ def calc_total(fpath:str) -> float:
     portfolio = read_portfolio(fpath)
     for holding in portfolio:
         total_cost += holding['shares'] * holding['price']
-    # with open(fpath, 'rt') as f:
-    #     rows = csv.reader(f)
-    #     headers = next(rows)
-    #     for i, row in enumerate(rows, start=1):
-    #         record = dict(zip(headers, row))
-    #         try:
-    #             shares = int(record['shares'])
-    #             price = float(record['price'])
-    #             total_cost += shares * price
-    #         except ValueError:
-    #             print(f'Row: {i} Couldn\'t convert: {row}')
     return total_cost
 
 
@@ -33,16 +22,12 @@ def read_from_gzip():
             print(line, end='')
 
 
-def run():
-    total_cost = calc_total('Data/portfoliodate.csv')
-    print(f'Total cost: {total_cost:,.2f}')
-    # read_from_gzip()
-
-# if len(sys.argv) > 1:
-#     csv_file = sys.argv[1]
-# else:
-#     csv_file = 'Data/portfolio.csv'
+def main():
+    assert len(sys.argv) == 2, 'Unexpected number of args passed to main'
+    portfolio_csv = sys.argv[1]
+    cost = calc_total(portfolio_csv)
+    print(f'Portfolio cost: {cost:,.2f}')
 
 
 if __name__ == '__main__':
-    run()
+    main()

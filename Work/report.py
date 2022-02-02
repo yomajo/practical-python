@@ -1,7 +1,7 @@
 # report.py
 #
 # Exercise 2.4
-import csv
+import sys
 from fileparse import parse_csv
 
 def read_portfolio(filename):
@@ -54,10 +54,11 @@ def print_report(report:list):
     for name, shares, current_price, change in report:
         print(f'{name:>10} {shares:>10} {current_price:>10} {change:>10.2f}')
 
+def main():
+    assert len(sys.argv) == 3, 'Error parsing command line arguments'
+    portfolio_csv_path = sys.argv[1]
+    prices_csv_path = sys.argv[2]
+    portfolio_report(portfolio_csv_path, prices_csv_path)
 
-if __name__ == '__main__':    
-    files = ['Data/portfolio.csv', 'Data/portfolio2.csv']
-    for name in files:
-        print(f'{name:-^43s}')
-        portfolio_report(name, 'Data/prices.csv')
-        print()
+if __name__ == '__main__':
+    main()
