@@ -2,32 +2,15 @@
 #
 # Exercise 2.4
 import csv
-from pprint import pprint
+from fileparse import parse_csv
 
 def read_portfolio(filename):
     '''opens a given portfolio file and reads it into a list of tuples'''
-    portfolio = []
-    types = [str, int, float]
-    with open(filename, 'rt') as f:
-        rows = csv.reader(f)
-        headers = next(rows)
-        for row in rows:
-            holding = dict(zip(headers, row))
-            holding['shares'] = int(holding['shares'])
-            holding['price'] = float(holding['price'])
-            portfolio.append(holding)
-    return portfolio
+    return parse_csv(filename=filename, select=['name', 'shares', 'price'], types=[str, int, float])
 
 def read_prices(filename):
     '''returns price dict from passed csv file path'''
-    prices = {}
-    with open(filename, 'rt') as f:
-        rows = csv.reader(f)
-        for row in rows:
-            if row:
-                name, price = row
-                prices[name] = float(price)
-    return prices
+    return parse_csv(filename=filename, has_headers=False, types=[str, float], silence_errors=True)
 
 def portfolio_profit_loss():
     portfolio = read_portfolio('Data/portfolio.csv')
@@ -72,7 +55,7 @@ def print_report(report:list):
         print(f'{name:>10} {shares:>10} {current_price:>10} {change:>10.2f}')
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':    
     files = ['Data/portfolio.csv', 'Data/portfolio2.csv']
     for name in files:
         print(f'{name:-^43s}')

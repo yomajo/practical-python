@@ -4,21 +4,26 @@
 import gzip
 import csv
 import sys
+from report import read_portfolio
+
 
 def calc_total(fpath:str) -> float:
     '''calc cost of portfolio inside csv'''
     total_cost = 0
-    with open(fpath, 'rt') as f:
-        rows = csv.reader(f)
-        headers = next(rows)
-        for i, row in enumerate(rows, start=1):
-            record = dict(zip(headers, row))
-            try:
-                shares = int(record['shares'])
-                price = float(record['price'])
-                total_cost += shares * price
-            except ValueError:
-                print(f'Row: {i} Couldn\'t convert: {row}')
+    portfolio = read_portfolio(fpath)
+    for holding in portfolio:
+        total_cost += holding['shares'] * holding['price']
+    # with open(fpath, 'rt') as f:
+    #     rows = csv.reader(f)
+    #     headers = next(rows)
+    #     for i, row in enumerate(rows, start=1):
+    #         record = dict(zip(headers, row))
+    #         try:
+    #             shares = int(record['shares'])
+    #             price = float(record['price'])
+    #             total_cost += shares * price
+    #         except ValueError:
+    #             print(f'Row: {i} Couldn\'t convert: {row}')
     return total_cost
 
 
