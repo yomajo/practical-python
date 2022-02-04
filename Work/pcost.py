@@ -2,7 +2,6 @@
 #
 # Exercise 1.27
 import gzip
-import csv
 import sys
 from report import read_portfolio
 

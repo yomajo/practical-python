@@ -4,13 +4,18 @@
 import sys
 from fileparse import parse_csv
 
-def read_portfolio(filename):
-    '''opens a given portfolio file and reads it into a list of tuples'''
-    return parse_csv(filename=filename, select=['name', 'shares', 'price'], types=[str, int, float])
 
-def read_prices(filename):
+def read_portfolio(filename:str):
+    '''opens a given portfolio file and reads it into a list of tuples'''
+    with open(filename, mode='rt') as f:
+        contents = parse_csv(f=f, select=['name', 'shares', 'price'], types=[str, int, float])
+    return contents
+
+def read_prices(filename:str):
     '''returns price dict from passed csv file path'''
-    return parse_csv(filename=filename, has_headers=False, types=[str, float], silence_errors=True)
+    with open(filename, mode='rt') as f:
+        contents = parse_csv(f=f, has_headers=False, types=[str, float], silence_errors=True)
+    return contents
 
 def portfolio_profit_loss():
     portfolio = read_portfolio('Data/portfolio.csv')
@@ -59,6 +64,7 @@ def main():
     portfolio_csv_path = sys.argv[1]
     prices_csv_path = sys.argv[2]
     portfolio_report(portfolio_csv_path, prices_csv_path)
+
 
 if __name__ == '__main__':
     main()
