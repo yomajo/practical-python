@@ -3,13 +3,15 @@
 # Exercise 2.4
 import sys
 from fileparse import parse_csv
+from stock import Stock
 
 
 def read_portfolio(filename:str):
     '''opens a given portfolio file and reads it into a list of tuples'''
     with open(filename, mode='rt') as f:
-        contents = parse_csv(f=f, select=['name', 'shares', 'price'], types=[str, int, float])
-    return contents
+        csv_contents = parse_csv(f=f, select=['name', 'shares', 'price'], types=[str, int, float])
+        stocks = [Stock(s['name'], s['shares'], s['price']) for s in csv_contents]
+    return stocks
 
 def read_prices(filename:str):
     '''returns price dict from passed csv file path'''
@@ -22,24 +24,22 @@ def portfolio_profit_loss():
     prices = read_prices('Data/prices.csv')
     cost = 0.0
     value = 0.0
-    for holding in portfolio:
-        name = holding['name']
-        shares = holding['shares']
-        price = holding['price']
-        current_price = prices.get(name, price)
-        cost += shares * price
+    for s in portfolio:
+        name = s.name
+        shares = s.shares
+        current_price = prices[name]
+        cost += s.cost()
         value += shares * current_price
     print(f'Portfolio cost: {cost:,.2f}, current value: {value:,.2f}. P/L: {value-cost:,.2f}')
 
 def get_report_obj(portfolio:list, prices:dict) -> list:
     '''returns report obj as list of tuple rows'''
     report = []
-    for stock in portfolio:
-        name, shares, price_paid = stock['name'], stock['shares'], stock['price']
-        current_price = prices.get(name, price_paid)
-        change = current_price - price_paid
+    for s in portfolio:
+        current_price = prices[s.name]
+        change = current_price - s.price
         current_price_dollar = f'${current_price}'
-        report_data = (name, shares, current_price_dollar, change)
+        report_data = (s.name, s.shares, current_price_dollar, change)
         report.append(report_data)
     return report
 
@@ -67,4 +67,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    portfolio_report()

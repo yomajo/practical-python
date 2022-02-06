@@ -6,12 +6,12 @@ import sys
 from report import read_portfolio
 
 
-def calc_total(fpath:str) -> float:
+def portfolio_cost(fpath:str) -> float:
     '''calc cost of portfolio inside csv'''
     total_cost = 0
     portfolio = read_portfolio(fpath)
-    for holding in portfolio:
-        total_cost += holding['shares'] * holding['price']
+    for s in portfolio:
+        total_cost += s.cost()
     return total_cost
 
 
@@ -24,7 +24,7 @@ def read_from_gzip():
 def main():
     assert len(sys.argv) == 2, 'Unexpected number of args passed to main'
     portfolio_csv = sys.argv[1]
-    cost = calc_total(portfolio_csv)
+    cost = portfolio_cost(portfolio_csv)
     print(f'Portfolio cost: {cost:,.2f}')
 
 
