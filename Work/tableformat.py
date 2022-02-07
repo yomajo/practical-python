@@ -12,7 +12,7 @@ class TableFormatter:
 
 class TextTableFormatter(TableFormatter):
     '''Emit a table to plain-text format'''
-    
+
     def headings(self, headers:list):
         for h in headers:
             print(f'{h:>10s}', end=' ')
@@ -45,6 +45,9 @@ class HTMLTableFormatter(TableFormatter):
     def row(self, row_data):
         htmled_data_str = ''.join([f'<td>{d}</td>' for d in row_data])
         print(f'<tr>{htmled_data_str}</tr>')
+
+class FormatError(Exception):
+    pass
         
 def create_formatter(fmt:str):
     '''returns formatter instance based on str abbreviation'''
@@ -55,9 +58,34 @@ def create_formatter(fmt:str):
     try:
         formatter = formatters[fmt]()
         return formatter
-    except KeyError as e:
-        raise KeyError(f'Unknown formatter query: {e}')
+    except KeyError:
+        raise FormatError(f'Unknown table format: {fmt}')
+
+def print_table(portfolio:list, attributes:list, fmt):
+    '''prints select data in passed fmt format'''
+    # print headings
+    fmt.headings(attributes)
+    
+    # print table body
+    for s in portfolio:
+        setattr(s, 'row_data', [])
+        row_data = []
+        for attr in attributes:
+            if hasattr(s, attr):
+                attr_value = str(getattr(s, attr))
+                s.row_data.append(attr_value)
+        fmt.row(s.row_data)
+
+
+def run():
+    from report import read_portfolio
+
+    formatter = create_formatter('txt')
+    portfolio = read_portfolio('Data/portfolio.csv')
+    
+    print_table(portfolio=portfolio, attributes=['name', 'shares'], fmt=formatter)
 
 
 if __name__ == '__main__':
-    pass
+    run()
+    # pass

@@ -17,5 +17,7 @@ class Stock():
         return self.shares
 
     def __repr__(self) -> str:
-        return f'<Stock: {self.name}, shares: {self.shares}, price: {self.price}>'
+        return f'Stock({self.name}, {self.shares}, {self.price})'
         
+if __name__ == '__main__':
+    pass
