@@ -4,16 +4,14 @@
 import gzip
 import sys
 from report import read_portfolio
+from portfolio import Portfolio
 
 
 def portfolio_cost(fpath:str) -> float:
     '''calc cost of portfolio inside csv'''
     total_cost = 0
     portfolio = read_portfolio(fpath)
-    for s in portfolio:
-        total_cost += s.cost
-    return total_cost
-
+    return portfolio.total_cost
 
 def read_from_gzip():
     with gzip.open('Data/portfolio.csv.gz', 'rt') as f:
@@ -29,4 +27,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    cost = portfolio_cost('Data/portfolio.csv')
+    print(f'Portfolio cost: {cost:,.2f}')
+    # main()
