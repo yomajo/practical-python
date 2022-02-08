@@ -11,7 +11,7 @@ def portfolio_cost(fpath:str) -> float:
     total_cost = 0
     portfolio = read_portfolio(fpath)
     for s in portfolio:
-        total_cost += s.cost()
+        total_cost += s.cost
     return total_cost
 
 
