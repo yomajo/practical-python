@@ -8,11 +8,11 @@ from tableformat import create_formatter
 from portfolio import Portfolio
 
 
-def read_portfolio(filename:str):
+def read_portfolio(filename:str, **opts):
     '''opens a given portfolio file and reads it into a list of tuples'''
     with open(filename, mode='rt') as f:
-        csv_contents = parse_csv(f=f, select=['name', 'shares', 'price'], types=[str, int, float])
-        stocks = [Stock(s['name'], s['shares'], s['price']) for s in csv_contents]
+        csv_contents = parse_csv(f=f, select=['name', 'shares', 'price'], types=[str, int, float], **opts)
+        stocks = [Stock(**s) for s in csv_contents]
     return Portfolio(stocks)
 
 def read_prices(filename:str):
