@@ -1,25 +1,18 @@
-
+from typedproperty import String, Integer, Float
 
 class Stock():
     '''represents single stock object'''
 
-    __slots__ = ('name', '_shares', 'price')
+    __slots__ = ('_name', '_shares', '_price')
+    name = String('name')
+    shares = Integer('shares')
+    price = Float('price')
+
     def __init__(self, name:str, shares:int, price:float):
         self.name = name
         self.shares = shares
         self.price = price
     
-    @property
-    def shares(self):
-        return self._shares
-
-    @shares.setter
-    def shares(self, value):
-        if isinstance(value, int):
-            self._shares = value
-        else:
-            raise TypeError(f'Expected an integer for attribute: shares')
-
     @property
     def cost(self):
         '''returns stock purchase cost'''
@@ -37,7 +30,8 @@ def run():
     msft = {'name': 'MSFT', 'shares': 150, 'price': 175.65}
     s = Stock(**msft)
     print(s.shares)
-    s.new_attr = 'Wont allow me due to slots present...'
+    # s.new_attr = 'Wont allow me due to slots present...'
+    # s.price = '743.65'
 
 if __name__ == '__main__':
     # pass
