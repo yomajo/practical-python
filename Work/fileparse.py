@@ -4,6 +4,8 @@
 
 import csv
 from typing import TextIO
+import logging
+
 
 
 def parse_csv(f:TextIO, select:list=None, types:list=None, has_headers:bool=True, delimiter=',', silence_errors:bool=False):
@@ -36,7 +38,8 @@ def parse_csv(f:TextIO, select:list=None, types:list=None, has_headers:bool=True
                     row = [func(val) for func, val in zip(types, row)]
                 except ValueError as e:
                     if not silence_errors:
-                        print(f'Error parsing row: {i}. Error: {e}')
+                        logging.warning("Couldn't parse : %s", row)
+                        logging.debug("Reason : %s", e)
                     continue
             record = dict(zip(headers, row))
         else:
@@ -46,7 +49,8 @@ def parse_csv(f:TextIO, select:list=None, types:list=None, has_headers:bool=True
                     record = tuple([func(val) for func, val in zip(types, row)])
                 except ValueError as e:
                     if not silence_errors:
-                        print(f'Error parsing row: {i}. Error: {e}')
+                        logging.warning("Couldn't parse : %s", row)
+                        logging.debug("Reason : %s", e)
                     continue
             else:
                 record = tuple([val for val in row])

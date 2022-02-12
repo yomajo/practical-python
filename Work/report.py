@@ -5,6 +5,13 @@ import sys
 from fileparse import parse_csv
 from tableformat import create_formatter
 from portfolio import Portfolio
+import logging
+
+logging.basicConfig(
+    filename = 'app.log',            # Name of the log file (omit to use stderr)
+    filemode = 'w',                  # File mode (use 'a' to append)
+    level    = logging.WARNING,      # Logging level (DEBUG, INFO, WARNING, ERROR, or CRITICAL)
+)
 
 
 def read_portfolio(filename:str, **opts):
@@ -51,6 +58,7 @@ def portfolio_report(portfolio_csv_path:str='Data/portfolio.csv', prices_csv_pat
 
     formatter = create_formatter(fmt)
     print_report(report, formatter)
+    logging.info('Finished without errors')
 
 def print_report(report:list, formatter):
     '''prints report to terminal'''
