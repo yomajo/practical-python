@@ -1,6 +1,6 @@
 from collections import Counter
-from fileparse import parse_csv
-from stock import Stock
+from .fileparse import parse_csv
+from .stock import Stock
 
 class Portfolio:
 

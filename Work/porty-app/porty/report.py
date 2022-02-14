@@ -2,10 +2,11 @@
 #
 # Exercise 2.4
 import sys
-from fileparse import parse_csv
-from tableformat import create_formatter
-from portfolio import Portfolio
+from .fileparse import parse_csv
+from .tableformat import create_formatter
+from .portfolio import Portfolio
 import logging
+
 
 logging.basicConfig(
     filename = 'app.log',            # Name of the log file (omit to use stderr)
@@ -67,14 +68,14 @@ def print_report(report:list, formatter):
         row_data = [ name, str(shares), current_price, f'{change:0.2f}']
         formatter.row(row_data)
 
-def main():
-    assert len(sys.argv) >= 3, 'Error parsing command line arguments'
-    portfolio_csv_path = sys.argv[1]
-    prices_csv_path = sys.argv[2]
-    fmt = sys.argv[3] if sys.argv[3] else 'txt'
+def main(sys_args):
+    assert len(sys_args) >= 3, 'Error parsing command line arguments'
+    portfolio_csv_path = sys_args[1]
+    prices_csv_path = sys_args[2]
+    fmt = sys_args[3] if len(sys_args) > 3 else 'txt'
     portfolio_report(portfolio_csv_path, prices_csv_path, fmt)
 
 
 if __name__ == '__main__':
-    # main()
-    portfolio_report(fmt='txt')
+    main()
+    # portfolio_report(fmt='txt')

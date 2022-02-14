@@ -3,8 +3,8 @@
 # Exercise 1.27
 import gzip
 import sys
-from report import read_portfolio
-from portfolio import Portfolio
+from .report import read_portfolio
+from .portfolio import Portfolio
 
 
 def portfolio_cost(fpath:str) -> float:
